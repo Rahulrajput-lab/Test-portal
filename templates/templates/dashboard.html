@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <h2>Welcome, {{ user.username }}!</h2>
+        <p>Take tests and track your performance history below.</p>
+    </div>
+    <a href="{{ url_for('take_test') }}" class="btn btn-success">Start New Test</a>
+</div>
+
+<div class="card">
+    <h3>Previous Test Attempts</h3>
+    {% if results %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Test #</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in results %}
+            <tr>
+                <td>#{{ loop.index }}</td>
+                <td>{{ r.score }}</td>
+                <td>{{ r.total_questions }}</td>
+                <td><strong>{{ r.percentage }}%</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="empty-state">No tests taken yet. Click "Start New Test" above to begin!</p>
+    {% endif %}
+</div>
+{% endblock %}

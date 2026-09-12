@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <div class="test-header">
+        <h2>Online Assessment</h2>
+        <div id="timer" class="timer-badge">Time Left: <span id="time-display">05:00</span></div>
+    </div>
+    <form id="quiz-form" method="POST" action="{{ url_for('take_test') }}">
+        {% for q in questions %}
+        <div class="question-block">
+            <p class="question-title"><b>Q{{ loop.index }}.</b> {{ q.question_text }}</p>
+            <div class="options-grid">
+                <label class="option-label">
+                    <input type="radio" name="q_{{ q.id }}" value="A"> A) {{ q.option_a }}
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q_{{ q.id }}" value="B"> B) {{ q.option_b }}
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q_{{ q.id }}" value="C"> C) {{ q.option_c }}
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q_{{ q.id }}" value="D"> D) {{ q.option_d }}
+                </label>
+            </div>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary btn-submit">Submit Assessment</button>
+    </form>
+</div>
+
+<script>
+    // 5-minute countdown timer with auto-submit
+    let timeLeft = 300;
+    const timerElem = document.getElementById('time-display');
+    const formElem = document.getElementById('quiz-form');
+
+    const countdown = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        timerElem.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            alert("Time is up! Submitting your answers automatically.");
+            formElem.submit();
+        }
+        timeLeft -= 1;
+    }, 1000);
+</script>
+{% endblock %}
